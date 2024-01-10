@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { MyResp } from "./apiRoutes";
+import { ApiResp } from "./user-management-common/apiRoutesCommon";
 
-export async function myPOST<MyReq, MySuccessResp>(request: NextRequest, executor: (req: MyReq) => Promise<MyResp<MySuccessResp>>): Promise<NextResponse<MyResp<MySuccessResp>>> {
-    type MyResp1 = MyResp<MySuccessResp>;
+export async function myPOST<MyReq, MySuccessResp>(request: NextRequest, executor: (req: MyReq) => Promise<ApiResp<MySuccessResp>>): Promise<NextResponse<ApiResp<MySuccessResp>>> {
+    type MyResp = ApiResp<MySuccessResp>;
 
     let myReq: MyReq;
     try {
         myReq = await request.json();
     } catch (reason) {
         console.log('exception in json(): ', reason, 'end of exception in json()');
-        const resp: MyResp1 = {
+        const resp: MyResp = {
             type: 'error',
             error: JSON.stringify(reason)
         }
@@ -23,7 +23,7 @@ export async function myPOST<MyReq, MySuccessResp>(request: NextRequest, executo
         return NextResponse.json(mySuccessResp);
     } catch (reason) {
         console.error('caught in executor: ', reason);
-        const resp: MyResp1 = {
+        const resp: MyResp = {
             type: 'error',
             error: JSON.stringify(reason)
         }

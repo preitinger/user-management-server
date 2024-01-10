@@ -1,9 +1,9 @@
 import { NextRequest } from "next/server";
 import { myPOST } from "./apiRoutesForServer";
 import { RegisterReq, RegisterResp } from "./user-management-common/register";
-import { MyResp } from "./apiRoutes";
+import { ApiResp } from "./user-management-common/apiRoutesCommon";
 
-const executeRegister = async (req: RegisterReq): Promise<MyResp<RegisterResp>> => {
+const executeRegister = async (req: RegisterReq): Promise<ApiResp<RegisterResp>> => {
     const resp: RegisterResp = {
         type: 'success'
     }
