@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ApiResp } from "./user-management-common/apiRoutesCommon";
 
-export async function myPOST<MyReq, MySuccessResp>(request: NextRequest, executor: (req: MyReq) => Promise<ApiResp<MySuccessResp>>): Promise<NextResponse<ApiResp<MySuccessResp>>> {
+export async function apiPOST<MyReq, MySuccessResp>(request: NextRequest, executor: (req: MyReq) => Promise<ApiResp<MySuccessResp>>): Promise<NextResponse<ApiResp<MySuccessResp>>> {
     type MyResp = ApiResp<MySuccessResp>;
 
     let myReq: MyReq;

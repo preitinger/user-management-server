@@ -1,5 +1,3 @@
-import { NextRequest } from "next/server";
-import { myPOST } from "./apiRoutesForServer";
 import { RegisterReq, RegisterResp } from "./user-management-common/register";
 import { ApiResp } from "./user-management-common/apiRoutesCommon";
 
