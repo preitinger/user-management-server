@@ -130,3 +130,11 @@ export async function executeLogout(req: LogoutReq): Promise<ApiResp<LogoutResp>
         }
     }
 }
+
+export async function checkToken(user: string, token: string): Promise<boolean> {
+    const res = await (await clientPromise).db(dbName).collection<UserDoc>('users').findOne({
+        _id: user,
+        token: token
+    });
+    return res != null && token === res.token;
+}
