@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ApiResp } from "./user-management-common/apiRoutesCommon";
+import { AccumulatedReq, AccumulatedResp, ApiResp } from "./user-management-common/apiRoutesCommon";
 
 export async function apiPOST<MyReq, MySuccessResp>(request: NextRequest, executor: (req: MyReq) => Promise<ApiResp<MySuccessResp>>): Promise<NextResponse<ApiResp<MySuccessResp>>> {
     type MyResp = ApiResp<MySuccessResp>;
@@ -30,3 +30,42 @@ export async function apiPOST<MyReq, MySuccessResp>(request: NextRequest, execut
         return NextResponse.json(resp);
     }
 }
+
+export const accumulatedExecutor: (executors: { [key: string]: (req1: any) => any}) => (req2: AccumulatedReq) => Promise<ApiResp<AccumulatedResp>> = (executors) => async (req) => {
+    const responses = [];
+    for (const r of req.requests) {
+        try {
+            const executor = executors[r.type];
+            if (typeof(executor) !== 'function') {
+                const msg = 'executor not found for type ' + r.type;
+                console.error(msg);
+                responses.push({
+                    type: 'error',
+                    error: msg
+                });
+            } else {
+                const resp = await executor(r);
+                responses.push(resp);
+            }
+        } catch (reason) {
+            let msg: string;
+            if (reason instanceof Error) {
+                msg = `Unknown server error(${reason.name}): ${reason.message}`;
+            } else {
+                msg = JSON.stringify(reason);
+            }
+            responses.push({
+                type: 'error',
+                error: msg
+            })
+        }
+    }
+
+    const completeResp: ApiResp<AccumulatedResp> = {
+        type: 'success',
+        responses: responses
+    }
+    return completeResp;
+}
+
+
