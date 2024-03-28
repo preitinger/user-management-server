@@ -10,8 +10,8 @@ const options = {}
 let client
 let clientPromise: Promise<MongoClient>
 
-if (process.env.NODE_ENV === 'development') {
-    console.warn('process.env.NODE_ENV === "development"')
+if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
+    console.warn(`process.env.NODE_ENV === "${process.env.NODE_ENV}"`)
   // In development mode, use a global variable so that the value
   // is preserved across module reloads caused by HMR (Hot Module Replacement).
   let globalWithMongo = global as typeof globalThis & {
