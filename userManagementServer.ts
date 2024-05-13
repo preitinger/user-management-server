@@ -142,3 +142,16 @@ export async function checkToken(user: string, token: string): Promise<boolean> 
     });
     return res != null && token === res.token;
 }
+
+export async function checkUser(user: string): Promise<boolean> {
+    const res = await (await clientPromise).db(dbName).collection<UserDoc>('users').findOne({
+        _id: user,
+    }, {
+        projection: {
+            _id: 1,
+            token: 0
+        }
+    });
+    return res != null;
+
+}
